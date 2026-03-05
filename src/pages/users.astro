@@ -1,12 +1,44 @@
 ---
-const response = await fetch('https://chatapp-backend-lh6y8i35j-zzanarif16s-projects.vercel.app/api/users');
-const users = await response.json();
+type User = {
+  name?: string;
+  phone?: string;
+};
+
+type PublicEnv = {
+  PUBLIC_API_BASE_URL?: string;
+};
+
+const env = (import.meta as ImportMeta & { env?: PublicEnv }).env;
+const apiBaseUrl =
+  env?.PUBLIC_API_BASE_URL ||
+  "https://chatapp-backend-lh6y8i35j-zzanarif16s-projects.vercel.app";
+
+let users: User[] = [];
+let fetchError = "";
+
+try {
+  const response = await fetch(`${apiBaseUrl}/api/users`);
+  if (!response.ok) {
+    throw new Error(`Request gagal dengan status ${response.status}`);
+  }
+  users = (await response.json()) as User[];
+} catch (error) {
+  fetchError = error instanceof Error ? error.message : "Gagal memuat data user";
+}
 ---
 <html>
   <body>
     <h1>Daftar User</h1>
-    <ul>
-      {users.map(user => <li>{user.name} ({user.phone})</li>)}
-    </ul>
+    {fetchError ? (
+      <p>Terjadi error: {fetchError}</p>
+    ) : (
+      <ul>
+        {users.map((user) => (
+          <li>
+            {user.name ?? "Tanpa Nama"} ({user.phone ?? "-"})
+          </li>
+        ))}
+      </ul>
+    )}
   </body>
 </html>

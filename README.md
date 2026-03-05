@@ -1,53 +1,77 @@
 # ChatApp Frontend (Astro)
 
-Ini adalah frontend aplikasi chat berbasis [Astro](https://astro.build/), terintegrasi dengan backend API (serverless di Vercel).
+Frontend aplikasi chat menggunakan [Astro](https://astro.build/) untuk dideploy ke Vercel project `chatapp`.
 
-## Fitur
+URL frontend production saat ini:
 
-- Menampilkan daftar user dari backend
-- Siap dikembangkan untuk fitur chat, kontak, grup, dsb
+- `https://chatapp-ekwhv4a7b-zzanarif16s-projects.vercel.app/`
 
-## Struktur Project
+## Prasyarat
 
-- `src/pages/users.astro` — Contoh halaman fetch data user dari backend
-- `astro.config.mjs`, `package.json` — Konfigurasi Astro
+- Node.js 18+
+- Backend sudah online (misalnya Vercel project `chatapp-backend`)
 
-## Cara Menjalankan Lokal
+## Jalankan Lokal
 
-1. Clone repo ini:
+1. Masuk folder project:
    ```bash
-   git clone https://github.com/zzanarif16/chatpp.git
    cd chatapp
    ```
-2. Install dependencies:
+2. Install dependency:
    ```bash
    npm install
    ```
-3. Jalankan Astro dev server:
+3. Buat file `.env` dan isi URL backend:
+   ```env
+   PUBLIC_API_BASE_URL=http://localhost:3000
+   ```
+4. Jalankan dev server:
    ```bash
    npm run dev
    ```
-4. Buka [http://localhost:4321/users](http://localhost:4321/users) untuk melihat daftar user.
+5. Buka:
+   - `http://localhost:4321/`
+   - `http://localhost:4321/users`
 
-## Konfigurasi URL Backend
+## Environment Variable
 
-Edit file `src/pages/users.astro` dan ganti URL backend sesuai endpoint API Anda (misal dari Vercel):
+Halaman `src/pages/users.astro` membaca backend URL dari:
 
-```js
-const response = await fetch("https://chatapp-backend.vercel.app/api/users");
+- `PUBLIC_API_BASE_URL`
+
+Contoh saat production:
+
+```env
+PUBLIC_API_BASE_URL=https://chatapp-backend-lh6y8i35j-zzanarif16s-projects.vercel.app
 ```
 
-## Deploy ke Vercel
+## Push ke GitHub Repo `chatapp`
 
-1. Push repo ke GitHub.
-2. Login ke [Vercel](https://vercel.com/), hubungkan repo ini.
-3. Deploy, Vercel akan memberikan URL publik.
+Contoh jika remote belum ada:
 
-## Integrasi Backend
+```bash
+git init
+git add .
+git commit -m "setup astro frontend for vercel"
+git branch -M main
+git remote add origin https://github.com/<username>/chatapp.git
+git push -u origin main
+```
 
-- Backend serverless (Vercel) harus sudah online dan dapat diakses publik.
-- Database menggunakan MySQL Clever Cloud.
+Jika remote sudah ada:
 
-## Lisensi
+```bash
+git add .
+git commit -m "update astro frontend for vercel"
+git push
+```
 
-Bebas digunakan untuk pembelajaran dan pengembangan.
+## Deploy ke Vercel Project `chatapp`
+
+1. Import repo `chatapp` di Vercel.
+2. Framework preset: `Astro`.
+3. Build command: `npm run build`.
+4. Output directory: `dist`.
+5. Tambahkan Environment Variable:
+   - `PUBLIC_API_BASE_URL=https://chatapp-backend-lh6y8i35j-zzanarif16s-projects.vercel.app`
+6. Deploy.
